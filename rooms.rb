@@ -1,12 +1,14 @@
 class Room
 
-attr_reader :name, :guests, :playlist, :capacity
+attr_reader :name, :guests, :playlist, :capacity, :fee, :till
 
-  def initialize(name, capacity)
+  def initialize(name, capacity, till, fee)
     @name = name
     @guests = []
     @playlist = []
     @capacity = capacity
+    @till = till
+    @fee = fee
   end
 
   def count_guests
@@ -19,6 +21,8 @@ attr_reader :name, :guests, :playlist, :capacity
 
   def check_in_guest_to_room(guest)
    @guests.push(guest) unless is_full?
+   guest.remove_cash(@fee)
+   add_money(@fee)
   end
 
   def check_out_guest_to_room(guest)
@@ -35,6 +39,10 @@ attr_reader :name, :guests, :playlist, :capacity
 
   def is_full?
     @guests.count() == capacity
+  end
+
+  def add_money(amount)
+    @till += amount
   end
 
 

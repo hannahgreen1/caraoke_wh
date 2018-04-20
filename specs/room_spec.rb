@@ -9,12 +9,12 @@ require_relative('../guests')
 class RoomTest < MiniTest::Test
 
   def setup
-    @room1 = Room.new("Blue Room", 3)
+    @room1 = Room.new("Blue Room", 3, 100, 10)
 
-    @guest1 = Guests.new("Hannah")
-    @guest2 = Guests.new("Davina")
-    @guest3 = Guests.new("Rachel")
-    @guest4 = Guests.new("Colin")
+    @guest1 = Guests.new("Hannah", 50)
+    @guest2 = Guests.new("Davina", 50)
+    @guest3 = Guests.new("Rachel", 50)
+    @guest4 = Guests.new("Colin", 50)
   end
 
   def test_room_name
@@ -87,5 +87,31 @@ class RoomTest < MiniTest::Test
       @guest3
     ]
     assert_equal(expected_guests, @room1.guests)
+  end
+
+  def test_room_fee
+    answer = 10
+    result =  @room1.fee
+    assert_equal(answer,result)
+  end
+
+  def test_till_float
+    answer = 100
+    result =  @room1.till
+    assert_equal(answer,result)
+  end
+
+
+  def test_till_can_recieve_money
+    answer = 110
+    result =  @room1.add_money(10)
+    assert_equal(answer,result)
+  end
+
+  def test_transaction_complete
+    @room1.check_in_guest_to_room(@guest1)
+    assert_equal(1, @room1.count_guests())
+    assert_equal(40, @guest1.wallet)
+    assert_equal(110, @room1.till)
   end
 end
